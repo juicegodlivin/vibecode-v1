@@ -1,0 +1,20 @@
+{
+  "name": "vibecode-v1",
+  "version": "1.0.0",
+  "description": "A hilarious parody website scraped from vibe-coded.lol using Firecrawl MCP",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "ai",
+    "parody",
+    "landing-page",
+    "firecrawl",
+    "mcp"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+
