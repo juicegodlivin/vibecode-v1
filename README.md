@@ -43,9 +43,10 @@ xdg-open index.html
 
 Or just double-click the `index.html` file.
 
-## Features (from the original site)
+## Features (from the original site + enhancements)
 
 - 🧭 **Fixed navigation header** with smooth scrolling
+- 📋 **CA Widget** - One-click copy contract address (shows "Soon..." until launch)
 - 🎨 **Beautiful gradient backgrounds** (hero section and rainbow gradient "About Us")
 - 💎 **$0 Revenue badge**
 - ∞ **Technical Debt counter**
@@ -57,6 +58,20 @@ Or just double-click the `index.html` file.
 - 🔗 **Broken links that go nowhere**
 - ⭐ **Fake testimonials** with `{{TEMPLATE_VARIABLES}}`
 - 📱 **Responsive design** for mobile devices
+
+## 🚀 Updating the CA (Contract Address) at Launch
+
+When you're ready to launch, simply update line 21 in `index.html`:
+
+```html
+<!-- Change this line: -->
+<span style="..." id="caText">Soon...</span>
+
+<!-- To your actual CA: -->
+<span style="..." id="caText">YourContractAddressHere</span>
+```
+
+The widget will automatically enable one-click copy functionality once you replace "Soon..." with the actual address!
 
 ## Original Source
 

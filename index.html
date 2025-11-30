@@ -7,6 +7,11 @@
     <meta name="author" content="Claude, ChatGPT, Cursor, Copilot, et al.">
     <title>Every Fucking AI-Coded Website Ever</title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="Vibe Code Meme Logo Favicon.png">
+    <link rel="apple-touch-icon" href="Vibe Code Meme Logo Favicon.png">
+    <link rel="shortcut icon" type="image/png" href="Vibe Code Meme Logo Favicon.png">
+    
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -192,16 +197,23 @@
 <body id="page-top">
 
     <!-- Navigation -->
-    <nav style="background: white; padding: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
+    <nav style="background: white; padding: 15px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
         <div class="container">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <a href="#page-top" style="color: #F05F40; font-weight: 700; font-size: 18px; text-decoration: none;">The Only AI-Coded Page</a>
-                <div style="display: flex; gap: 30px;">
+                
+                <div style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap;">
                     <a href="#about" style="color: #222; text-decoration: none; font-weight: 500;">About</a>
                     <a href="#services" style="color: #222; text-decoration: none; font-weight: 500;">Four Icons</a>
                     <a href="#portfolio" style="color: #222; text-decoration: none; font-weight: 500;">Stock Photos</a>
                     <a href="#broken-links" style="color: #222; text-decoration: none; font-weight: 500;">Resources</a>
                     <a href="#contact" style="color: #222; text-decoration: none; font-weight: 500;">DM Me</a>
+                    
+                    <!-- CA Widget -->
+                    <div id="caWidget" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.2s;" onclick="copyCA()" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <span style="color: white; font-weight: 600; font-size: 13px; font-family: monospace;" id="caText">Soon...</span>
+                        <i class="fa fa-copy" style="color: white; font-size: 14px;"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -679,6 +691,42 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script>
         new WOW().init();
+        
+        // CA Copy Functionality
+        function copyCA() {
+            const caText = document.getElementById('caText').innerText;
+            
+            // Don't copy if it says "Soon..."
+            if (caText === 'Soon...') {
+                showCopyFeedback('🚀 Launching Soon!');
+                return;
+            }
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(caText).then(function() {
+                showCopyFeedback('✅ Copied!');
+            }).catch(function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = caText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyFeedback('✅ Copied!');
+            });
+        }
+        
+        function showCopyFeedback(message) {
+            const widget = document.getElementById('caWidget');
+            const originalText = document.getElementById('caText').innerText;
+            document.getElementById('caText').innerText = message;
+            
+            // Reset after 2 seconds
+            setTimeout(function() {
+                document.getElementById('caText').innerText = originalText;
+            }, 2000);
+        }
     </script>
 
 </body>
