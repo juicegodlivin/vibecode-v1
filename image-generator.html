@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered image generator - Because why learn Photoshop?">
+    <meta name="author" content="Claude, ChatGPT, Cursor, Copilot, et al.">
+    <title>AI Image Generator | Vibe-Coded</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="Vibe Code Meme Logo Favicon.png">
+    <link rel="apple-touch-icon" href="Vibe Code Meme Logo Favicon.png">
+    <link rel="shortcut icon" type="image/png" href="Vibe Code Meme Logo Favicon.png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+        
+        .generator-container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .generator-title {
+            text-align: center;
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .generator-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+        
+        .prompt-input {
+            width: 100%;
+            padding: 20px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s;
+        }
+        
+        .prompt-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+        
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .image-result {
+            margin-top: 40px;
+            text-align: center;
+            display: none;
+        }
+        
+        .generated-image {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .download-btn {
+            background: #10b981;
+            color: white;
+        }
+        
+        .download-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .share-btn {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .share-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        .done-btn {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .done-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        .loading {
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .rate-limit-warning {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .rate-limit-warning.show {
+            display: block;
+        }
+        
+        .rate-counter {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav style="background: white; padding: 15px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <a href="index.html" style="color: #F05F40; font-weight: 700; font-size: 18px; text-decoration: none;">The Only AI-Coded Page</a>
+                
+                <div style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap;">
+                    <a href="index.html#about" style="color: #222; text-decoration: none; font-weight: 500;">About</a>
+                    <a href="index.html#services" style="color: #222; text-decoration: none; font-weight: 500;">Four Icons</a>
+                    <a href="index.html#portfolio" style="color: #222; text-decoration: none; font-weight: 500;">Stock Photos</a>
+                    <a href="image-generator.html" style="color: #667eea; text-decoration: none; font-weight: 600;">AI Generator</a>
+                    <a href="index.html#contact" style="color: #222; text-decoration: none; font-weight: 500;">DM Me</a>
+                    
+                    <!-- CA Widget -->
+                    <div id="caWidget" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.2s;" onclick="copyCA()" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <span style="color: white; font-weight: 600; font-size: 13px; font-family: monospace;" id="caText">8H3s4QTkfroVvy47bgxq6Zj6pd3YXPuxuqMhLJfgpump</span>
+                        <i class="fa fa-copy" style="color: white; font-size: 14px;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Generator Container -->
+    <div class="generator-container">
+        <h1 class="generator-title">AI Image Generator</h1>
+        <p class="generator-subtitle">✨ Because why learn art when you can just prompt it? ✨</p>
+        
+        <div class="rate-counter">
+            <span id="rateCounter">5 generations remaining this minute</span>
+        </div>
+        
+        <textarea 
+            id="promptInput" 
+            class="prompt-input" 
+            placeholder="Describe your image... (e.g., 'a cute cat wearing sunglasses on a beach at sunset')"
+        ></textarea>
+        
+        <button id="generateBtn" class="generate-btn" onclick="generateImage()">
+            <i class="fa fa-magic"></i> Generate Image
+        </button>
+        
+        <div id="rateLimitWarning" class="rate-limit-warning">
+            <strong>⚠️ Rate Limit Reached!</strong>
+            <p>You've used all 5 generations for this minute. Please wait <span id="countdown">60</span> seconds.</p>
+        </div>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p style="color: #666; font-size: 16px;">Generating your masterpiece...<br>This may take 10-30 seconds</p>
+        </div>
+        
+        <div id="imageResult" class="image-result">
+            <img id="generatedImage" class="generated-image" alt="Generated image">
+            <div class="action-buttons">
+                <button class="action-btn download-btn" onclick="downloadImage()">
+                    <i class="fa fa-download"></i> Download
+                </button>
+                <button class="action-btn share-btn" onclick="shareImage()">
+                    <i class="fa fa-share-alt"></i> Share
+                </button>
+                <button class="action-btn done-btn" onclick="clearImage()">
+                    <i class="fa fa-times"></i> Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <script>
+        // Rate limiting logic
+        const RATE_LIMIT = 5;
+        const RATE_WINDOW = 60000; // 1 minute in milliseconds
+        
+        let generations = [];
+        let countdownInterval = null;
+        
+        function updateRateLimit() {
+            const now = Date.now();
+            // Remove generations older than 1 minute
+            generations = generations.filter(time => now - time < RATE_WINDOW);
+            
+            const remaining = RATE_LIMIT - generations.length;
+            document.getElementById('rateCounter').textContent = 
+                `${remaining} generation${remaining !== 1 ? 's' : ''} remaining this minute`;
+            
+            return remaining > 0;
+        }
+        
+        function startCountdown() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            const oldestGeneration = Math.min(...generations);
+            const waitTime = RATE_WINDOW - (Date.now() - oldestGeneration);
+            let secondsLeft = Math.ceil(waitTime / 1000);
+            
+            document.getElementById('countdown').textContent = secondsLeft;
+            document.getElementById('rateLimitWarning').classList.add('show');
+            
+            countdownInterval = setInterval(() => {
+                secondsLeft--;
+                document.getElementById('countdown').textContent = secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('rateLimitWarning').classList.remove('show');
+                    updateRateLimit();
+                }
+            }, 1000);
+        }
+        
+        // CA Copy functionality
+        function copyCA() {
+            const caText = document.getElementById('caText').innerText;
+            navigator.clipboard.writeText(caText).then(function() {
+                const originalText = caText;
+                document.getElementById('caText').innerText = '✅ Copied!';
+                setTimeout(function() {
+                    document.getElementById('caText').innerText = originalText;
+                }, 2000);
+            });
+        }
+        
+        // Image generation
+        async function generateImage() {
+            if (!updateRateLimit()) {
+                startCountdown();
+                return;
+            }
+            
+            const prompt = document.getElementById('promptInput').value.trim();
+            if (!prompt) {
+                alert('Please enter a prompt!');
+                return;
+            }
+            
+            // Add to rate limit tracker
+            generations.push(Date.now());
+            updateRateLimit();
+            
+            // Show loading, hide result
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('imageResult').style.display = 'none';
+            document.getElementById('generateBtn').disabled = true;
+            
+            try {
+                // Call your backend API endpoint
+                const response = await fetch('/api/generate-image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.imageUrl) {
+                    // Display the generated image
+                    document.getElementById('generatedImage').src = data.imageUrl;
+                    document.getElementById('imageResult').style.display = 'block';
+                } else {
+                    alert('Failed to generate image. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('generateBtn').disabled = false;
+            }
+        }
+        
+        function downloadImage() {
+            const img = document.getElementById('generatedImage');
+            const link = document.createElement('a');
+            link.href = img.src;
+            link.download = 'vibe-coded-ai-image.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        async function shareImage() {
+            const img = document.getElementById('generatedImage');
+            
+            if (navigator.share) {
+                try {
+                    // Fetch the image as a blob
+                    const response = await fetch(img.src);
+                    const blob = await response.blob();
+                    const file = new File([blob], 'vibe-coded-ai-image.png', { type: blob.type });
+                    
+                    await navigator.share({
+                        title: 'Check out my AI-generated image!',
+                        text: 'Created with Vibe-Coded AI Generator',
+                        files: [file]
+                    });
+                } catch (error) {
+                    // Fallback: copy link
+                    copyImageLink();
+                }
+            } else {
+                // Fallback: copy link
+                copyImageLink();
+            }
+        }
+        
+        function copyImageLink() {
+            const img = document.getElementById('generatedImage');
+            navigator.clipboard.writeText(img.src).then(() => {
+                alert('Image link copied to clipboard!');
+            });
+        }
+        
+        function clearImage() {
+            document.getElementById('imageResult').style.display = 'none';
+            document.getElementById('generatedImage').src = '';
+            document.getElementById('promptInput').value = '';
+        }
+        
+        // Allow Enter to generate (with Shift+Enter for new lines)
+        document.getElementById('promptInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                generateImage();
+            }
+        });
+        
+        // Initialize rate counter
+        updateRateLimit();
+    </script>
+
+</body>
+</html>
+

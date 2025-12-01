@@ -1,20 +1,29 @@
 {
   "name": "vibecode-v1",
   "version": "1.0.0",
-  "description": "A hilarious parody website scraped from vibe-coded.lol using Firecrawl MCP",
+  "description": "A hilarious parody website scraped from vibe-coded.lol using Firecrawl MCP with AI image generator",
   "main": "index.html",
   "scripts": {
-    "dev": "npx serve .",
-    "start": "npx serve ."
+    "dev": "node server.js",
+    "start": "node server.js",
+    "vercel": "vercel dev"
   },
   "keywords": [
     "ai",
     "parody",
     "landing-page",
     "firecrawl",
-    "mcp"
+    "mcp",
+    "image-generator",
+    "replicate"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
 }
 

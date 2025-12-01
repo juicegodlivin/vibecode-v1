@@ -59,19 +59,34 @@ Or just double-click the `index.html` file.
 - ⭐ **Fake testimonials** with `{{TEMPLATE_VARIABLES}}`
 - 📱 **Responsive design** for mobile devices
 
-## 🚀 Updating the CA (Contract Address) at Launch
+## 🎨 AI Image Generator
 
-When you're ready to launch, simply update line 21 in `index.html`:
+The site includes a custom AI image generator powered by Replicate API:
 
-```html
-<!-- Change this line: -->
-<span style="..." id="caText">Soon...</span>
+### Features:
+- ⚡ **Rate Limited**: 5 images per minute per user (IP-based)
+- 🖼️ **High Quality**: Uses Stable Diffusion XL for generation
+- 📥 **Download & Share**: Users can save or share their creations
+- 🎭 **Auto-delete**: Images disappear when user clicks "Done"
 
-<!-- To your actual CA: -->
-<span style="..." id="caText">YourContractAddressHere</span>
-```
+### Setup for Deployment:
 
-The widget will automatically enable one-click copy functionality once you replace "Soon..." with the actual address!
+1. **Get Replicate API Key**:
+   - Sign up at [Replicate](https://replicate.com)
+   - Get your API token from [Account Settings](https://replicate.com/account/api-tokens)
+
+2. **Add Environment Variable** (Vercel):
+   - Go to your Vercel project settings
+   - Navigate to Environment Variables
+   - Add: `REPLICATE_API_KEY` = `your_api_key_here`
+
+3. **Deploy**: The serverless function will automatically work once deployed!
+
+## 🚀 Updating the CA (Contract Address)
+
+The CA widget in the header shows: `8H3s4QTkfroVvy47bgxq6Zj6pd3YXPuxuqMhLJfgpump`
+
+To update it, edit the `caText` span in both `index.html` and `image-generator.html`.
 
 ## Original Source
 
