@@ -664,6 +664,17 @@
         </div>
     </section>
 
+    <!-- Audio Player -->
+    <audio id="bgMusic" loop>
+        <source src="Vibe Code Meme.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Floating Play/Pause Button -->
+    <div id="musicToggle" style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); z-index: 10000; transition: all 0.3s;" onclick="toggleMusic()" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.6)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.4)'">
+        <i id="musicIcon" class="fa fa-play" style="color: white; font-size: 24px; margin-left: 3px;"></i>
+    </div>
+
     <!-- Cookie Banner -->
     <div id="cookieBanner" style="position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; padding: 30px 20px; box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.3); z-index: 9999; border-top: 3px solid #8b5cf6; display: block;">
         <div style="max-width: 1200px; margin: 0 auto;">
@@ -727,6 +738,53 @@
                 document.getElementById('caText').innerText = originalText;
             }, 2000);
         }
+        
+        // Music Player Functionality
+        let isPlaying = false;
+        const music = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                musicIcon.className = 'fa fa-play';
+                musicIcon.style.marginLeft = '3px';
+                isPlaying = false;
+            } else {
+                music.play();
+                musicIcon.className = 'fa fa-pause';
+                musicIcon.style.marginLeft = '0';
+                isPlaying = true;
+            }
+        }
+        
+        // Attempt autoplay when page loads
+        window.addEventListener('load', function() {
+            // Try to autoplay (may be blocked by browser)
+            music.play().then(function() {
+                isPlaying = true;
+                musicIcon.className = 'fa fa-pause';
+                musicIcon.style.marginLeft = '0';
+            }).catch(function(error) {
+                // Autoplay was prevented, user will need to click play
+                console.log('Autoplay prevented. Click the music button to play.');
+            });
+        });
+        
+        // Also try on first user interaction
+        document.addEventListener('click', function initAudio() {
+            if (!isPlaying) {
+                music.play().then(function() {
+                    isPlaying = true;
+                    musicIcon.className = 'fa fa-pause';
+                    musicIcon.style.marginLeft = '0';
+                }).catch(function() {
+                    // Still blocked, that's ok
+                });
+            }
+            // Remove this listener after first click
+            document.removeEventListener('click', initAudio);
+        }, { once: true });
     </script>
 
 </body>
